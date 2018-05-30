@@ -6,7 +6,7 @@ import res.labs.discoverhttp.wrapper.LineByLineInputStream;
 
 /**
  * This class parse the request header.
- * We select the field that we need to do the job
+ * We select the field that we need to do the right job
  * Request-line section 5.1
  * Content type section 10.5
  * 
@@ -38,18 +38,18 @@ public class RequestHandler {
         }
         
         if(line.isEmpty()){
-            return 400;
+            return 400; //Bad request status
         }else{
             
             requestContentType = line.substring("Accept: ".length());
         }
         
-        return 200;
+        return 200; //Well define request
     }
     
     /**
      * Retrieve the HTTP method in the request-line section 5.1
-     * We design this function accroding the specific implemententation we have to do
+     * We design this function according the specific implementation we have to do
      * amid GET and POST method
      * 
      * @return the HTTP method in the request-line

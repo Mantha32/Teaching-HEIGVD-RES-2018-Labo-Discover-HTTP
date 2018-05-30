@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import res.labs.discoverhttp.data.Clock;
 
 /**
  *
@@ -23,7 +24,10 @@ public class Server {
         if(args.length > 0){        
             listenPort = Integer.parseInt(args[0]);
         }
-    
+        
+        //Instance the new clock for the server!
+        Clock clock = new Clock();
+        
         System.out.println("Listening for connection on port " + listenPort + " ...." );
         
         //bind the serverSocket with a port
@@ -38,8 +42,8 @@ public class Server {
             @Override
             public void run() {
                 System.out.println("Send data to client " + server.getLocalSocketAddress());
-                Date today = new Date();
-                String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + today + "\r\n";
+                
+                String httpResponse = "HTTP/1.1 200 OK\r\n" + clock.getTime() + "\r\n";
                 try {                 
                     socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
                     socket.close();

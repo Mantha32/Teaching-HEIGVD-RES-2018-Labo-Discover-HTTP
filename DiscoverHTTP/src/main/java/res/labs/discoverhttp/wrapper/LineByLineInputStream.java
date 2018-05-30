@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  *
  * Readline mimics the readline method in Reader object
- * This method detetc the \r\n sequence and return the stream.
+ * This method detect the \r\n sequence and return the stream.
  * @author fidimala
  */
 public class LineByLineInputStream extends FilterInputStream{
