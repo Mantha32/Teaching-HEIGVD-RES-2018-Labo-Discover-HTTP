@@ -24,17 +24,15 @@ public class LineByLineInputStream extends FilterInputStream{
        
    
     public String readline() throws IOException{
-        System.out.println("ReadLine processing: ");
-        
-        StringBuilder sb = new StringBuilder();
+       
+        StringBuilder sb = new StringBuilder("");
         
         int readValue = super.read(); 
         
         boolean wasR_EOL = false;
         boolean wasN_EOL = false;
         
-        System.out.print(readValue);
-        while((readValue != -1) && (!wasR_EOL || !wasN_EOL)){            
+        while((readValue != -1)){            
             
             switch(readValue){
                 case '\r':
@@ -47,11 +45,16 @@ public class LineByLineInputStream extends FilterInputStream{
                     sb.append((char)readValue);
             }
             
-            readValue = super.read();
-            System.out.println(readValue);
+            if(wasR_EOL && wasN_EOL){
+                break;
+            }else{
+                readValue = super.read();
+            }    
         }
         
-        return sb.toString();
+        String line = sb.toString();
+                
+        return line;
     }
     
 }
