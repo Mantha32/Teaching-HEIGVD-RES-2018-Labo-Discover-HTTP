@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.data.Clock;
+import res.labs.discoverhttp.handler.RequestHandler;
+import res.labs.discoverhttp.handler.ResponseHandler;
 import res.labs.discoverhttp.wrapper.LineByLineInputStream;
 
 /**
@@ -22,37 +24,27 @@ import res.labs.discoverhttp.wrapper.LineByLineInputStream;
  */
 public class ClientWorker implements Runnable{
     private final Socket socketClient;
-    LineByLineInputStream reader = null;
+    RequestHandler requestHandler = null;
+    ResponseHandler responseHandler = null;
     
     
     public ClientWorker(Socket socket) throws IOException{
         socketClient = socket;
-        reader = new LineByLineInputStream(socket.getInputStream());    
+        requestHandler = new RequestHandler(socket.getInputStream());
+        responseHandler = new ResponseHandler(socket.getOutputStream());
     }
     
-    public void parseRequest() throws IOException{
-        System.out.println("parse the client request");
-        
-        StringBuilder sb = new StringBuilder();
-        String line;
-        do{
-            line = reader.readline();
-            System.out.println(line);
-        }while(!line.isEmpty());
-        
-        System.out.println("End header request!");
-
+    public int parseRequest() throws IOException{
+      return requestHandler.processing();
    }
     
 public void sendResponse() throws IOException{
-    parseRequest();
-    Clock clock = new Clock();
-    String httpResponse = "HTTP/1.1 200 OK\r\n" + clock.getTime() + "\r\n";                
-    socketClient.getOutputStream().write(httpResponse.getBytes("UTF-8"));
+    int status = parseRequest();
+    
+    responseHandler.send(requestHandler.getRequestContentType()[0], requestHandler.getMethod(), status);
     System.out.println("data sending for client");
     System.out.println("End connexion");
-    socketClient.close();
-    reader.close();
+    
     } 
 
     @Override
@@ -60,7 +52,6 @@ public void sendResponse() throws IOException{
         try {
             sendResponse();
             socketClient.close();
-            reader.close();
         }catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }    

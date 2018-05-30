@@ -15,7 +15,16 @@ import res.labs.discoverhttp.handler.RequestHandler;
 /**
  *
  * @author Rafidimalala
+ * example header
+ * GET / HTTP/1.1
+ * Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
  */
+
+/*
+GET / HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
+*/
+
 public class Server {
   public static void main(String[] args) throws IOException{ 
     int listenPort = 8080; 

@@ -28,28 +28,16 @@ public class RequestHandler {
      * @throws IOException 
      */
     public int processing() throws IOException{
-       
+       int statusCode = 0;
         requestLine = reader.readline();
-        
         System.out.println("First line contents: ");
         System.out.println(requestLine);
         
-        //retrieve the content-type section 10.5
-        boolean isContentType = false;
-        String line = reader.readline();
-        while(!line.isEmpty() && !isContentType){
-            isContentType = line.contains("Accept:");
+        if ("GET".equals(getMethod())){
+            statusCode = GETHandler();
         }
         
-        if(line.isEmpty()){
-            return 400; //Bad request status
-        }else{
-            
-            requestContentType = line.substring("Accept: ".length());
-            System.out.println("Negociation type: " + requestContentType);
-        }
-        
-        return 200; //Well define request
+        return statusCode;
     }
     
     /**
@@ -71,4 +59,26 @@ public class RequestHandler {
         return requestContentType.split(",");
     }
       
+    private int GETHandler() throws IOException{
+       
+        //retrieve the content-type section 10.5
+        boolean isContentType = false;
+        String line;
+        
+        do{
+            line = reader.readline();
+            isContentType = line.contains("Accept:");
+        }while(!line.isEmpty() && !isContentType);
+        
+        if(!isContentType){
+            return StatusCode.BAD_REQUEST;
+        }else{
+            
+            requestContentType = line.substring("Accept: ".length());
+            System.out.println("Negociation type: " + requestContentType);
+        }
+        
+        return StatusCode.OK; //Well define request    
+    }
+    
 }

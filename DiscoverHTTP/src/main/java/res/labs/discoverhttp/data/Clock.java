@@ -69,4 +69,9 @@ public class Clock {
        return dateFormat.format(cal.getTime());
        
    }
+   
+   public String toJson(){
+       String tmp[] = getTime().split(":");
+       return "{ hour: " + tmp[0] + ", minute: " + tmp[1] + "}";
+   }
 }
