@@ -1,4 +1,6 @@
 package res.labs.discoverhttp;
+import java.io.BufferedInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -6,6 +8,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.data.Clock;
+import res.labs.discoverhttp.handler.RequestHandler;
 
 /**
  *
@@ -36,26 +39,9 @@ public class Server {
         while(true){
             Socket socket = server.accept();
             System.out.println("New client is detected!" );
-            
-            //Handle each connexion 
-            Thread serverThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Send data to client " + server.getLocalSocketAddress());
-                
-                String httpResponse = "HTTP/1.1 200 OK\r\n" + clock.getTime() + "\r\n";
-                try {                 
-                    socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
-                    socket.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            
-            serverThread.start();
-            
-
+                     
+            //handle each requested client
+            new Thread(new ClientWorker(socket)).start();
         }
         
         

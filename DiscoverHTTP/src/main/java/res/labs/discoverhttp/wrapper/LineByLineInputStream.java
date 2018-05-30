@@ -8,6 +8,7 @@ package res.labs.discoverhttp.wrapper;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedInputStream;
 
 /**
  *
@@ -18,16 +19,21 @@ import java.io.InputStream;
 public class LineByLineInputStream extends FilterInputStream{
     //private final InputStream reader;
     public LineByLineInputStream(InputStream is){
-        super(is);
+        super(new BufferedInputStream(is));
     }
        
    
     public String readline() throws IOException{
+        System.out.println("ReadLine processing: ");
+        
         StringBuilder sb = new StringBuilder();
-        int readValue = super.read();
+        
+        int readValue = super.read(); 
+        
         boolean wasR_EOL = false;
         boolean wasN_EOL = false;
         
+        System.out.print(readValue);
         while((readValue != -1) && (!wasR_EOL || !wasN_EOL)){            
             
             switch(readValue){
@@ -42,6 +48,7 @@ public class LineByLineInputStream extends FilterInputStream{
             }
             
             readValue = super.read();
+            System.out.println(readValue);
         }
         
         return sb.toString();

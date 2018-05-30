@@ -28,7 +28,11 @@ public class RequestHandler {
      * @throws IOException 
      */
     public int processing() throws IOException{
+       
         requestLine = reader.readline();
+        
+        System.out.println("First line contents: ");
+        System.out.println(requestLine);
         
         //retrieve the content-type section 10.5
         boolean isContentType = false;
@@ -42,6 +46,7 @@ public class RequestHandler {
         }else{
             
             requestContentType = line.substring("Accept: ".length());
+            System.out.println("Negociation type: " + requestContentType);
         }
         
         return 200; //Well define request
