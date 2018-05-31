@@ -38,8 +38,16 @@ public class ClientWorker implements Runnable{
 public void sendResponse() throws IOException{
     int status = parseRequest();
     String contentType = requestHandler.getRequestContentType()[0];
+    String requestedMethod = requestHandler.getMethod();
     System.out.println("CONTENT TYPE: " + contentType);
-    responseHandler.send(contentType, requestHandler.getMethod(), status, clock);
+    System.out.println("METHOD: " + requestedMethod);
+    
+    //Update the clock
+    if("POST".equals(requestedMethod)){
+        clock.set(requestHandler.getData());
+    }
+    
+    responseHandler.send(contentType, requestedMethod, status, clock);
     System.out.println("data sending for client");
     System.out.println("End connexion");
     

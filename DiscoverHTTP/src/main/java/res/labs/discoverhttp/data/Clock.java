@@ -39,17 +39,22 @@ public class Clock {
    
    /**
     * Process the ellasped time between the current clock and the clock that the client would like
-    * @param hostTime 
+    * @param hostTime is the posetd data in the body request following this format
+    * hour=15&minute=45
     */ 
    public void set(String hostTime){
-       String[] tmp = hostTime.split(":");
+       String[] tmp = hostTime.split("&");
        
         //get current date time with Calendar()
         Calendar cal = Calendar.getInstance();
-        
-       deltaHour = Integer.getInteger(tmp[0]) - cal.get(Calendar.HOUR_OF_DAY);
-       deltaMinute = Integer.getInteger(tmp[1]) - cal.get(Calendar.MINUTE);
-          
+        System.out.println("DATA HOUR sending by client: " + tmp[0]);
+       String[] tmpHour = tmp[0].split("=");
+       System.out.println("Delta hour: " + Integer.parseInt(tmpHour[1]));
+       deltaHour = Integer.parseInt(tmpHour[1]) - cal.get(Calendar.HOUR_OF_DAY);
+       
+       String[] tmpMinute = tmp[1].split("=");
+       System.out.println("Delta hour: " + Integer.parseInt(tmpMinute[1]));       
+       deltaMinute = Integer.parseInt(tmpMinute[1]) - cal.get(Calendar.MINUTE);
    }
    
    /**

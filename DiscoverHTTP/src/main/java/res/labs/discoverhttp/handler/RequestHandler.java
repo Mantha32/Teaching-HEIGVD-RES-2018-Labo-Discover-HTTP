@@ -17,6 +17,8 @@ public class RequestHandler {
     private  String requestLine = "";
     private  String requestContentType = "";
     private final LineByLineInputStream reader;
+    private String data= "";
+    
 
     public RequestHandler(InputStream is) throws IOException {
         reader = new LineByLineInputStream(is);   
@@ -35,6 +37,10 @@ public class RequestHandler {
         
         if ("GET".equals(getMethod())){
             statusCode = GETHandler();
+        }
+        
+        if ("POST".equals(getMethod())){
+            statusCode = POSTHandler();
         }
         
         return statusCode;
@@ -58,19 +64,16 @@ public class RequestHandler {
     public String[] getRequestContentType(){
         return requestContentType.split(",");
     }
-      
+    
+    public String getData(){
+        return data;
+    }
     private int GETHandler() throws IOException{
-       
-        //retrieve the content-type section 10.5
-        boolean isContentType = false;
         String line;
-        
-        do{
-            line = reader.readline();
-            isContentType = line.contains("Accept:");
-        }while(!line.isEmpty() && !isContentType);
-        
-        if(!isContentType){
+        //retrieve the content-type section 10.5
+        line = retrieveLineBy("Accept:");
+               
+        if(line.isEmpty()){
             return StatusCode.BAD_REQUEST;
         }else{
             
@@ -79,6 +82,44 @@ public class RequestHandler {
         }
         
         return StatusCode.OK; //Well define request    
+    }
+    
+    private int POSTHandler() throws IOException{
+        String contentLengthLine;
+        //retrieve the content-type section 10.5
+        int status = GETHandler();
+        
+        contentLengthLine = retrieveLineBy("Content-Length: ");
+        //escape the space
+        contentLengthLine = contentLengthLine.substring("Content-Length: ".length());
+        if(contentLengthLine.isEmpty())
+            return StatusCode.BAD_REQUEST;
+        
+        int contentLength = Integer.parseInt(contentLengthLine);
+        
+        //Consume the CRLF that separates the header and the body
+        reader.readline();
+        
+        data = reader.readline();
+        
+        if(data.isEmpty())
+            return StatusCode.BAD_REQUEST;
+        
+        return StatusCode.OK; //Well define request   
+        
+    }
+    
+    private String retrieveLineBy(String token) throws IOException{
+        //retrieve the content-type section 10.5
+        boolean isContentType;
+        String line = "";
+        
+        do{
+            line = reader.readline();
+            isContentType = line.contains(token);
+        }while(!line.isEmpty() && !isContentType); 
+        
+        return line;
     }
     
 }

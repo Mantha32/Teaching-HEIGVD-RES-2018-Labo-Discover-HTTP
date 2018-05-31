@@ -1,30 +1,34 @@
 package res.labs.discoverhttp;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.data.Clock;
-import res.labs.discoverhttp.handler.RequestHandler;
 
 /**
  *
  * @author Rafidimalala
- * example header
- * GET / HTTP/1.1
- * Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
  */
 
 /*
+Exeample header
+
 GET / HTTP/1.1
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
 Accept: application/xml
 Accept: application/json
+
+POST / HTTP/1.1
+Host: localhost
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9
+Accept-Language: en-us,en;q=0.5
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 18
+ 
+hour=15&minute=45
 */
 
 public class Server {
