@@ -23,6 +23,8 @@ import res.labs.discoverhttp.handler.RequestHandler;
 /*
 GET / HTTP/1.1
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
+Accept: application/xml
+Accept: application/json
 */
 
 public class Server {
@@ -52,7 +54,7 @@ public class Server {
             System.out.println("New client is detected!" );                     
             //handle each requested client
        
-            new Thread(new ClientWorker(socket)).start();
+            new Thread(new ClientWorker(socket,clock)).start();
         }
         
         

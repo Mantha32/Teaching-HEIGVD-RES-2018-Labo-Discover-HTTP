@@ -5,18 +5,13 @@
  */
 package res.labs.discoverhttp;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.data.Clock;
 import res.labs.discoverhttp.handler.RequestHandler;
 import res.labs.discoverhttp.handler.ResponseHandler;
-import res.labs.discoverhttp.wrapper.LineByLineInputStream;
 
 /**
  *
@@ -26,12 +21,14 @@ public class ClientWorker implements Runnable{
     private final Socket socketClient;
     RequestHandler requestHandler = null;
     ResponseHandler responseHandler = null;
+    Clock clock;
     
     
-    public ClientWorker(Socket socket) throws IOException{
+    public ClientWorker(Socket socket, Clock clock) throws IOException{
         socketClient = socket;
         requestHandler = new RequestHandler(socket.getInputStream());
         responseHandler = new ResponseHandler(socket.getOutputStream());
+        this.clock = clock;
     }
     
     public int parseRequest() throws IOException{
@@ -40,8 +37,9 @@ public class ClientWorker implements Runnable{
     
 public void sendResponse() throws IOException{
     int status = parseRequest();
-    
-    responseHandler.send(requestHandler.getRequestContentType()[0], requestHandler.getMethod(), status);
+    String contentType = requestHandler.getRequestContentType()[0];
+    System.out.println("CONTENT TYPE: " + contentType);
+    responseHandler.send(contentType, requestHandler.getMethod(), status, clock);
     System.out.println("data sending for client");
     System.out.println("End connexion");
     
