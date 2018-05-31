@@ -58,7 +58,7 @@ public final class RawHTML {
             body.append("<!DOCTYPE html>\n");
             body.append("<html>");
             body.append("<body>");
-            body.append("<title> hours </title>");
+            body.append("<title> Labo Hours Server </title>");
             body.append("<h1> TIME : ");
             body.append(clock.getTime());
             body.append("</h1>");

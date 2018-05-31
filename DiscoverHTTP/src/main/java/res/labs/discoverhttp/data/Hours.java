@@ -13,6 +13,15 @@ public class Hours {
         this.minute = minute;
     }
     
+    
+    public int getHour(){
+        return hour;
+    }
+    
+    public int getMinute(){
+        return minute;
+    }
+    
     @Override
     public String toString(){
         return Integer.toString(hour) + ":" + Integer.toString(minute);

@@ -10,8 +10,11 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.data.Clock;
+import res.labs.discoverhttp.data.Hours;
+import res.labs.discoverhttp.data.JsonObjectMapper;
 import res.labs.discoverhttp.handler.RequestHandler;
 import res.labs.discoverhttp.handler.ResponseHandler;
+import res.labs.discoverhttp.handler.SupportedFormat;
 
 /**
  *
@@ -44,12 +47,24 @@ public void sendResponse() throws IOException{
     
     //Update the clock
     if("POST".equals(requestedMethod)){
-        clock.set(requestHandler.getData());
+        
+        //Deal with dequested JSON format on demand
+        if(SupportedFormat.JSON.equals(contentType)){
+            Hours hours = JsonObjectMapper.parseJson(requestHandler.getData(), Hours.class);
+            
+            clock.set(hours.getHour(), hours.getMinute());
+            
+        }else{
+            String[] tmp = requestHandler.getData().split("&");
+            String[] tmpHour = tmp[0].split("=");
+            String[] tmpMinute = tmp[1].split("=");
+            clock.set(Integer.parseInt(tmpHour[1]), Integer.parseInt(tmpMinute[1]));
+        }
     }
     
     responseHandler.send(contentType, requestedMethod, status, clock);
     System.out.println("data sending for client");
-    System.out.println("End connexion");
+
     
     } 
 
