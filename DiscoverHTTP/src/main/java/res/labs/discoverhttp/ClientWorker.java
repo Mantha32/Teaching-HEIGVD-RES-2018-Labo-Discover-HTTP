@@ -42,13 +42,11 @@ public void sendResponse() throws IOException{
     int status = parseRequest();
     String contentType = requestHandler.getRequestContentType()[0];
     String requestedMethod = requestHandler.getMethod();
-    System.out.println("CONTENT TYPE: " + contentType);
-    System.out.println("METHOD: " + requestedMethod);
-    
+   
     //Update the clock
     if("POST".equals(requestedMethod)){
         
-        //Deal with dequested JSON format on demand
+        //Deal with requested JSON format on demand
         if(SupportedFormat.JSON.equals(contentType)){
             Hours hours = JsonObjectMapper.parseJson(requestHandler.getData(), Hours.class);
             
@@ -62,10 +60,11 @@ public void sendResponse() throws IOException{
         }
     }
     
-    responseHandler.send(contentType, requestedMethod, status, clock);
     System.out.println("data sending for client");
-
     
+    responseHandler.send(contentType, requestedMethod, status, clock);
+    
+    System.out.println("Connexion is closed!!!");
     } 
 
     @Override

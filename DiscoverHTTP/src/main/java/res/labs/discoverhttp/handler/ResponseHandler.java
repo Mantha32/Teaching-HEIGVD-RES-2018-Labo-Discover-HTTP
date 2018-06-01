@@ -24,6 +24,7 @@ public class ResponseHandler {
     }
     
     public void send(String supportedFormat, String method, int statusCode, Clock clock) throws UnsupportedEncodingException, IOException{
+        System.out.println("STATUS: " + statusCode);
         
         RawHTML rawHTML = new RawHTML(statusCode, supportedFormat, clock);
         

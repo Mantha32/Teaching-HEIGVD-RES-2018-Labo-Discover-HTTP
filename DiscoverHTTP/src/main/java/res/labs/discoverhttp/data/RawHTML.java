@@ -1,7 +1,6 @@
 
 package res.labs.discoverhttp.data;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.handler.StatusCode;
@@ -59,13 +58,21 @@ public final class RawHTML {
             body.append("<html>");
             body.append("<body>");
             body.append("<title> Labo Hours Server </title>");
-            body.append("<h1> TIME : ");
-            body.append(clock.getTime());
-            body.append("</h1>");
-            body.append("</body>");
-            body.append("</html>");                  
+            switch(statusCode){
+                case StatusCode.OK:  
+                    body.append("<h1> Time : ");
+                    body.append(clock.getTime());
+                    body.append("</h1>"); 
+                    break;
+                case StatusCode.BAD_REQUEST:
+                    body.append("<h1> ERROR 400: BAD REQUEST </h1>");  
+                    break;
+                case StatusCode.NOT_FOUND:
+                    body.append("<h1> ERROR 404: RESSOURCE NOT FOUND </h1>");
+                    break;
+            }                 
         }
-             
+                     
     }
     
     @Override

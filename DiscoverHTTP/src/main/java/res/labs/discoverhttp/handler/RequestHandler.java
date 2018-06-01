@@ -14,7 +14,7 @@ import res.labs.discoverhttp.wrapper.LineByLineInputStream;
  * @author fidimala
  */
 public class RequestHandler {
-    private  String requestLine = "";
+    private  String[] requestLine;
     private  String requestContentType = "";
     private final LineByLineInputStream reader;
     private String data= "";
@@ -30,10 +30,14 @@ public class RequestHandler {
      * @throws IOException 
      */
     public int processing() throws IOException{
-       int statusCode = 0;
-        requestLine = reader.readline();
-        System.out.println("First line contents: ");
-        System.out.println(requestLine);
+        int statusCode = 0;
+       
+        String tmpLine = reader.readline();
+        System.out.println("First line contents: " + tmpLine);
+        requestLine = tmpLine.split(" ");
+        
+        //Retrieve the negociated format 
+        
         
         if ("GET".equals(getMethod())){
             statusCode = GETHandler();
@@ -54,11 +58,15 @@ public class RequestHandler {
      * @return the HTTP method in the request-line
      */
     public String getMethod(){
-        return requestLine.split(" ")[0];
+        return requestLine[0];
+    }
+    
+    public String getRequestedRessource(){
+        return requestLine[1];
     }
     
     public String getHttpVersion(){
-        return requestLine.split(" ")[2];
+        return requestLine[2];
     }
     
     public String[] getRequestContentType(){
@@ -70,16 +78,36 @@ public class RequestHandler {
     }
     private int GETHandler() throws IOException{
         String line;
+        
+        System.out.println("METHOD: " + getMethod());
+        System.out.println("Requested ressource: --" + getRequestedRessource() + "--");
+        
+        
         //retrieve the content-type section 10.5
         line = retrieveLineBy("Accept:");
-               
-        if(line.isEmpty()){
-            return StatusCode.BAD_REQUEST;
-        }else{
+        requestContentType = line.substring("Accept: ".length());
+        System.out.println("CONTENT TYPE: " + requestContentType);
+        
+        if("/".equals(getRequestedRessource())){
+
+           /*
+            We assume that the first foramt is used to precess the response and if
+            the requested format in not valid , we send an error: bad request
+            */ 
+           String tmpContentType = getRequestContentType()[0];
+            System.out.println("Negociated content-type format: --" + tmpContentType + "--");
             
-            requestContentType = line.substring("Accept: ".length());
-            System.out.println("Negociation type: " + requestContentType);
+            if(line.isEmpty() || (!SupportedFormat.isSuppportedFormat(tmpContentType))){
+                return StatusCode.BAD_REQUEST;
+            }else{
+                System.out.println("Use this content type to process the response: --" + tmpContentType + "--");
+              
+            }   
+        }else{
+            //Ressource not found
+            return StatusCode.NOT_FOUND;
         }
+
         
         return StatusCode.OK; //Well define request    
     }
