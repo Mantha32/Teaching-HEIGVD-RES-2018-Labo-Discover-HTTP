@@ -37,6 +37,7 @@ public final class RawHTML {
     
     private void setHeader(int contentSize){
         
+        setStatusLine();
         header.append("Server: Dilifera clock service 1.0 \r\n");
         header.append("Date: ").append(clock.getGMTFormat()).append(CRLF);
         header.append("Content-Type: ").append(negociatedFormat).append(CRLF);
@@ -48,37 +49,68 @@ public final class RawHTML {
         
     }
     
-    private void setBody(){
-        if(SupportedFormat.JSON.equals(negociatedFormat)){
-            body.append(clock.toJson());
-        }else if (SupportedFormat.XML.equals(negociatedFormat)){
-            body.append(clock.toXML());
-        }else{ // the default body is html
-            body.append("<!DOCTYPE html>\n");
-            body.append("<html>");
-            body.append("<body>");
-            body.append("<title> Labo Hours Server </title>");
-            switch(statusCode){
-                case StatusCode.OK:  
-                    body.append("<h1> Time : ");
-                    body.append(clock.getTime());
-                    body.append("</h1>"); 
-                    break;
-                case StatusCode.BAD_REQUEST:
-                    body.append("<h1> ERROR 400: BAD REQUEST </h1>");  
-                    break;
-                case StatusCode.NOT_FOUND:
-                    body.append("<h1> ERROR 404: RESSOURCE NOT FOUND </h1>");
-                    break;
-            }                 
+    private void setBody(int status, String contentType){
+        if(SupportedFormat.JSON.equals(contentType)){
+            if(status == StatusCode.OK){
+                body.append(clock.toJson());
+            }else{
+                setBodyHTML(status);
+            }               
+        }else if (SupportedFormat.XML.equals(contentType)){
+            if(status == StatusCode.OK){
+                body.append(clock.toXML());
+            }else{
+                setBodyHTML(status);
+            }      
+        }else{ // the default body is text/html
+            setBodyHTML(status);
+            
         }
                      
     }
     
+    //handle the error status et text/html message, the text/html is used to perform the error message
+    private void setBodyHTML(int status){
+    // the default body is text/html
+        body.append("<!DOCTYPE html>\n");
+        body.append("<html>");
+        body.append("<body>");
+        body.append("<title> Labo Hours Server </title>");
+        switch(status){
+            case StatusCode.OK:
+                body.append("<h1> Time : ");
+                body.append(clock.getTime());
+                body.append("</h1>");
+                break; 
+            case StatusCode.CREATED:
+                body.append("<h1> INFO 201: The clock is updated! </h1>");  
+                break;                
+            case StatusCode.BAD_REQUEST:
+                body.append("<h1> ERROR 400: BAD REQUEST </h1>");  
+                break;
+            case StatusCode.FORBIDDEN:
+                body.append("<h1> ERROR 403: FORBIDDEN </h1>");
+                body.append("<p> You don't have the permission to access this ressource on this server.</p>" );
+                break;
+            case StatusCode.NOT_FOUND:
+                body.append("<h1> ERROR 404: RESSOURCE NOT FOUND </h1>");
+                body.append("<p> The requested URL  was not found on this server.</p>" );
+
+                break;
+            case StatusCode.METHOD_NOT_ALLOWED:
+                body.append("<h1> ERROR 405: METHOD NOT YET SUPPORTED</h1>");
+                break;
+            
+        }
+
+        body.append("</body>");
+        body.append("</html>");                
+    }
+    
     @Override
     public String toString(){
-        setStatusLine();
-        setBody();
+        
+        setBody(statusCode, negociatedFormat);
         int contentLength = body.toString().length();
         setHeader(contentLength);
         

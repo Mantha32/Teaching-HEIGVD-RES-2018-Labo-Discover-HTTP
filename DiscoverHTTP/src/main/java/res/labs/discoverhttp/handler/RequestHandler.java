@@ -30,7 +30,7 @@ public class RequestHandler {
      * @throws IOException 
      */
     public int processing() throws IOException{
-        int statusCode = 0;
+        int statusCode;
        
         String tmpLine = reader.readline();
         System.out.println("First line contents: " + tmpLine);
@@ -39,14 +39,17 @@ public class RequestHandler {
         //Retrieve the negociated format 
         
         
-        if ("GET".equals(getMethod())){
-            statusCode = GETHandler();
+        switch (getMethod()) {
+            case "GET":
+                statusCode = GETHandler();
+                break;
+            case "POST":
+                statusCode = POSTHandler();
+                break;
+            default:
+                return StatusCode.METHOD_NOT_ALLOWED;
         }
-        
-        if ("POST".equals(getMethod())){
-            statusCode = POSTHandler();
-        }
-        
+
         return statusCode;
     }
     
@@ -133,7 +136,7 @@ public class RequestHandler {
         if(data.isEmpty())
             return StatusCode.BAD_REQUEST;
         
-        return StatusCode.OK; //Well define request   
+        return StatusCode.CREATED; // The hour is updated   
         
     }
     
