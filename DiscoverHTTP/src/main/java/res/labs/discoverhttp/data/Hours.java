@@ -36,4 +36,21 @@ public class Hours {
      return sb.toString();
      
     }
+    
+    public String toXML(){
+       StringBuilder tmp = new StringBuilder();
+
+       tmp.append("<?xml version = \"1.0\"?>");
+       tmp.append("<hour-info>");
+       tmp.append("<hour>");
+       tmp.append(hour);
+       tmp.append("</hour>");
+       tmp.append("<minute>");
+       tmp.append(minute);
+       tmp.append("</minute>");
+       tmp.append("</hour-info>");
+       
+       return tmp.toString();
+    }
+    
 }

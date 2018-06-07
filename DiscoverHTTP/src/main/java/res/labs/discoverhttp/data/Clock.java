@@ -77,7 +77,7 @@ public class Clock {
                
         //return JsonObjectMapper.toJson(hours);
         
-        return hours.toJson();      
+        return hours.toJson();    
    }
    
    public String getGMTFormat(){
@@ -91,6 +91,7 @@ public class Clock {
    public String toXML(){
        StringBuilder tmp = new StringBuilder();
        String currentHour[] = getTime().split(":");
+        
        tmp.append("<?xml version = \"1.0\"?>");
        tmp.append("<hour-info>");
        tmp.append("<hour>");

@@ -22,7 +22,7 @@ WORKDIR DIRECTORY
 
 #The container listen in this specific ports
 #The port 8080/tcp is used to smtp server
-EXPOSE 8080
+#EXPOSE 8080
 
 
 #The default argument for the ENTREPOINT

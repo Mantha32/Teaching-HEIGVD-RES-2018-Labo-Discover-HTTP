@@ -49,6 +49,13 @@ public class RequestHandler {
             default:
                 return StatusCode.METHOD_NOT_ALLOWED;
         }
+        
+        //Consume all the header according the http protocole
+        String inputData = reader.readline();
+        while(!inputData.isEmpty()){
+            System.out.println(inputData);
+            inputData = reader.readline();
+        }        
 
         return statusCode;
     }
@@ -94,7 +101,7 @@ public class RequestHandler {
         if("/".equals(getRequestedRessource())){
 
            /*
-            We assume that the first foramt is used to precess the response and if
+            We assume that the first format is used to process the response and if
             the requested format in not valid , we send an error: bad request
             */ 
            String tmpContentType = getRequestContentType()[0];
@@ -103,15 +110,13 @@ public class RequestHandler {
             if(line.isEmpty() || (!SupportedFormat.isSuppportedFormat(tmpContentType))){
                 return StatusCode.BAD_REQUEST;
             }else{
-                System.out.println("Use this content type to process the response: --" + tmpContentType + "--");
-              
+                System.out.println("Use this content type to process the response: --" + tmpContentType + "--"); 
             }   
         }else{
             //Ressource not found
             return StatusCode.NOT_FOUND;
         }
-
-        
+               
         return StatusCode.OK; //Well define request    
     }
     
