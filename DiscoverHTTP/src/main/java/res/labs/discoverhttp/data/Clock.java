@@ -86,20 +86,11 @@ public class Clock {
         return df.format(now);
    }
    
-   public String toXML(){
-       StringBuilder tmp = new StringBuilder();
-       String currentHour[] = getTime().split(":");
-        
-       tmp.append("<?xml version = \"1.0\"?>");
-       tmp.append("<hour-info>");
-       tmp.append("<hour>");
-       tmp.append(currentHour[0]);
-       tmp.append("</hour>");
-       tmp.append("<minute>");
-       tmp.append(currentHour[1]);
-       tmp.append("</minute>");
-       tmp.append("</hour-info>");
+   public String toXML() throws JsonProcessingException{
+       String tmp[] = getTime().split(":");
        
-       return tmp.toString();
+       Hours hours = new Hours(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]));
+
+       return XmlObjectMapper.toXml(hours);
    }
 }

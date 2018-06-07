@@ -1,11 +1,13 @@
 package res.labs.discoverhttp.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * This class is used to serialize/deserialize
  * 
  * JsonObjectMapper utility class can use this class.
  * 
- * @author Olivier Liechti
+ * @author Iando Rafidimalala
  */
 public class Hours {
     private int hour;

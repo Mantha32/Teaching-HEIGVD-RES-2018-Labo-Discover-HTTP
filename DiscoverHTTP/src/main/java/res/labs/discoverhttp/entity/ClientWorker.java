@@ -8,6 +8,7 @@ import res.labs.discoverhttp.DiscoverHttp;
 import res.labs.discoverhttp.data.Clock;
 import res.labs.discoverhttp.data.Hours;
 import res.labs.discoverhttp.data.JsonObjectMapper;
+import res.labs.discoverhttp.data.XmlObjectMapper;
 import res.labs.discoverhttp.handler.RequestHandler;
 import res.labs.discoverhttp.handler.ResponseHandler;
 import res.labs.discoverhttp.handler.SupportedFormat;
@@ -44,13 +45,17 @@ public void sendResponse() throws IOException{
         
         //Deal with requested JSON format on demand
         if(SupportedFormat.JSON.equals(contentType)){
-            System.out.println("Hours class type: --" + Hours.class + "--");
             Hours hours;
             hours = JsonObjectMapper.parseJson(requestHandler.getData(), Hours.class);
             
             clock.set(hours.getHour(), hours.getMinute());
             
-        }else{
+        }else if(SupportedFormat.XML.equals(contentType)){
+            Hours hours;
+            hours = XmlObjectMapper.parseXml(requestHandler.getData(), Hours.class);
+            
+            clock.set(hours.getHour(), hours.getMinute());            
+        } else{
             String[] tmp = requestHandler.getData().split("&");
             String[] tmpHour = tmp[0].split("=");
             String[] tmpMinute = tmp[1].split("=");

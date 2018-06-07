@@ -26,9 +26,9 @@ docker run --name client-xml 127.0.0.1 8080 GET / application/xml
 ```
 - run a container that mimics POST:
 ```bash
-docker run --name client-html 127.0.0.1 8080 GET / text/html 15:30
-docker run --name client-json 127.0.0.1 8080 GET / application/json '{"hour":"11","minute":"53"}'
-docker run --name client-xml 127.0.0.1 8080 GET / application/xml "<hour-info><hour>17</hour><minute>50</minute></hour-info>"
+docker run --name client-html 127.0.0.1 8080 POST / text/html 15:30
+docker run --name client-json 127.0.0.1 8080 POST / application/json '{"hour":11,"minute":53}'
+docker run --name client-xml 127.0.0.1 8080 POST / application/xml "<Hours><hour>12</hour><minute>21</minute></Hours>"
 ```
 
 ## Testing the server
@@ -38,8 +38,6 @@ docker run --name client-xml 127.0.0.1 8080 GET / application/xml "<hour-info><h
 ### Using **Postman** client
 
 ### Using **telnet** client
-
-
 #### **GET** request
 ```bash
 telnet 127.0.0.1 8080
@@ -77,7 +75,7 @@ Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 28
 
-{"hour":"11","minute":"53"}
+{"hour":12,"minute":21}
 ```
 - with content-type ***application/xml***
 
@@ -92,7 +90,7 @@ Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 28
 
-<hour-info><hour>16</hour><minute>23</minute></hour-info>
+<Hours><hour>12</hour><minute>21</minute></Hours>
 ```
 
 

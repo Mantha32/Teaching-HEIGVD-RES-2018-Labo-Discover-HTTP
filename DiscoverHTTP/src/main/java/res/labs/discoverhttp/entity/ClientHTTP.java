@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import res.labs.discoverhttp.data.Hours;
 import res.labs.discoverhttp.data.JsonObjectMapper;
+import res.labs.discoverhttp.data.XmlObjectMapper;
 import res.labs.discoverhttp.handler.SupportedFormat;
 import res.labs.discoverhttp.wrapper.LineByLineInputStream;
 
@@ -126,7 +127,7 @@ public class ClientHTTP {
    private String setBody(String format, Hours hours) throws JsonProcessingException{     
        
        if(SupportedFormat.XML.equals(format)){
-           return hours.toXML();
+           return XmlObjectMapper.toXml(hours);
        }
        
        if(SupportedFormat.JSON.equals(format)){
