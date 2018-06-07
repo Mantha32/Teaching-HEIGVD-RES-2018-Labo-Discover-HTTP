@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package res.labs.discoverhttp;
+package res.labs.discoverhttp.entity;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import res.labs.discoverhttp.DiscoverHttp;
 import res.labs.discoverhttp.data.Clock;
 import res.labs.discoverhttp.data.Hours;
 import res.labs.discoverhttp.data.JsonObjectMapper;
@@ -48,7 +44,9 @@ public void sendResponse() throws IOException{
         
         //Deal with requested JSON format on demand
         if(SupportedFormat.JSON.equals(contentType)){
-            Hours hours = JsonObjectMapper.parseJson(requestHandler.getData(), Hours.class);
+            System.out.println("Hours class type: --" + Hours.class + "--");
+            Hours hours;
+            hours = JsonObjectMapper.parseJson(requestHandler.getData(), Hours.class);
             
             clock.set(hours.getHour(), hours.getMinute());
             
@@ -64,7 +62,7 @@ public void sendResponse() throws IOException{
     
     responseHandler.send(contentType, requestedMethod, status, clock);
     
-    System.out.println("Connexion is closed!!!");
+
     } 
 
     @Override
@@ -72,8 +70,9 @@ public void sendResponse() throws IOException{
         try {
             sendResponse();
             socketClient.close();
+            System.out.println("Connexion is closed!!!");
         }catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DiscoverHttp.class.getName()).log(Level.SEVERE, null, ex);
         }    
     }
     

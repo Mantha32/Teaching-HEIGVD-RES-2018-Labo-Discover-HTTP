@@ -70,14 +70,12 @@ public class Clock {
        
    }
    
-   public String toJson(){
+   public String toJson() throws JsonProcessingException{
        String tmp[] = getTime().split(":");
        
        Hours hours = new Hours(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]));
-               
-        //return JsonObjectMapper.toJson(hours);
-        
-        return hours.toJson();    
+       
+        return JsonObjectMapper.toJson(hours);
    }
    
    public String getGMTFormat(){

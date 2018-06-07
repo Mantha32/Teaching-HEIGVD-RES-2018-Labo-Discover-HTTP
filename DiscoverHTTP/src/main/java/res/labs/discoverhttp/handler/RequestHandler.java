@@ -42,21 +42,20 @@ public class RequestHandler {
         switch (getMethod()) {
             case "GET":
                 statusCode = GETHandler();
+                //Consume all the header according the http protocole
+                String inputData = reader.readline();
+                while(!inputData.isEmpty()){
+                    System.out.println(inputData);
+                    inputData = reader.readline();
+                } 
                 break;
             case "POST":
                 statusCode = POSTHandler();
                 break;
             default:
                 return StatusCode.METHOD_NOT_ALLOWED;
-        }
+        }   
         
-        //Consume all the header according the http protocole
-        String inputData = reader.readline();
-        while(!inputData.isEmpty()){
-            System.out.println(inputData);
-            inputData = reader.readline();
-        }        
-
         return statusCode;
     }
     
@@ -96,7 +95,6 @@ public class RequestHandler {
         //retrieve the content-type section 10.5
         line = retrieveLineBy("Accept:");
         requestContentType = line.substring("Accept: ".length());
-        System.out.println("CONTENT TYPE: " + requestContentType);
         
         if("/".equals(getRequestedRessource())){
 
@@ -105,7 +103,6 @@ public class RequestHandler {
             the requested format in not valid , we send an error: bad request
             */ 
            String tmpContentType = getRequestContentType()[0];
-            System.out.println("Negociated content-type format: --" + tmpContentType + "--");
             
             if(line.isEmpty() || (!SupportedFormat.isSuppportedFormat(tmpContentType))){
                 return StatusCode.BAD_REQUEST;
@@ -116,7 +113,7 @@ public class RequestHandler {
             //Ressource not found
             return StatusCode.NOT_FOUND;
         }
-               
+                       
         return StatusCode.OK; //Well define request    
     }
     
@@ -126,17 +123,25 @@ public class RequestHandler {
         int status = GETHandler();
         
         contentLengthLine = retrieveLineBy("Content-Length: ");
+        System.out.println("Content-Length line value: --" + contentLengthLine + "--");
+        
         //escape the space
         contentLengthLine = contentLengthLine.substring("Content-Length: ".length());
+        
         if(contentLengthLine.isEmpty())
             return StatusCode.BAD_REQUEST;
         
         int contentLength = Integer.parseInt(contentLengthLine);
-        
-        //Consume the CRLF that separates the header and the body
-        reader.readline();
-        
+                
+        //Consume all the header according the http protocole
+        String inputData = reader.readline();
+        while(!inputData.isEmpty()){
+            System.out.println(inputData);
+            inputData = reader.readline();
+        } 
+              
         data = reader.readline();
+        System.out.println("DATA: --" + data + "--");
         
         if(data.isEmpty())
             return StatusCode.BAD_REQUEST;

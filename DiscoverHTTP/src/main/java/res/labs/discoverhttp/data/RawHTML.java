@@ -1,6 +1,7 @@
 
 package res.labs.discoverhttp.data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import res.labs.discoverhttp.handler.StatusCode;
@@ -43,13 +44,13 @@ public final class RawHTML {
         header.append("Content-Type: ").append(negociatedFormat).append(CRLF);
         header.append("Content-Length: ").append(contentSize).append(CRLF);
         header.append("Last-Modified: ").append(clock.getGMTFormat()).append(CRLF);
-        header.append("Connection: Closed");
+        header.append("Connection: Closed").append(CRLF);
         header.append("Accept-Ranges: bytes");
         header.append(CRLF).append(CRLF);
         
     }
     
-    private void setBody(int status, String contentType){
+    private void setBody(int status, String contentType) throws JsonProcessingException{
         if(SupportedFormat.JSON.equals(contentType)){
             if(status == StatusCode.OK){
                 body.append(clock.toJson());
@@ -108,9 +109,13 @@ public final class RawHTML {
     }
     
     @Override
-    public String toString(){
+    public String toString() {
         
-        setBody(statusCode, negociatedFormat);
+        try {
+            setBody(statusCode, negociatedFormat);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(RawHTML.class.getName()).log(Level.SEVERE, null, ex);
+        }
         int contentLength = body.toString().length();
         setHeader(contentLength);
         

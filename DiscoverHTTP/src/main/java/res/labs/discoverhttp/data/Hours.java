@@ -1,18 +1,31 @@
 package res.labs.discoverhttp.data;
 
 /**
- *
- * @author fidimala
+ * This class is used to serialize/deserialize
+ * 
+ * JsonObjectMapper utility class can use this class.
+ * 
+ * @author Olivier Liechti
  */
 public class Hours {
-    private final int hour;
-    private final int minute;
+    private int hour;
+    private int minute;
 
     public Hours (int hour, int minute){
         this.hour = hour;
         this.minute = minute;
     }
     
+    //Introducing the dummy constructor to avoid error in processing string to java class
+    public Hours(){}
+    
+    public void setHours(int hours){
+        this.hour = hours;
+    }
+    
+    public void setMinute(int minute){
+        this.minute = minute;
+    }
     
     public int getHour(){
         return hour;
@@ -27,15 +40,6 @@ public class Hours {
         return Integer.toString(hour) + ":" + Integer.toString(minute);
     }
     
-    public String toJson(){
-     StringBuilder sb = new StringBuilder("{ \"hour\": \"");
-     sb.append(hour).append("\",");
-     sb.append("\"minute\": \"");
-     sb.append(minute).append("\"}");
-     
-     return sb.toString();
-     
-    }
     
     public String toXML(){
        StringBuilder tmp = new StringBuilder();
