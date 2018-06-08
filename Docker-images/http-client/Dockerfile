@@ -28,4 +28,5 @@ WORKDIR DIRECTORY
 #The default argument for the ENTREPOINT
 #The argument "-p 8080" stand for the port the http server listen to do the http conversation with the client such browser, netcat, telnet, curl
 
-ENTRYPOINT ["java","-jar","DiscoverHTTP-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","DiscoverHTTP-1.0-SNAPSHOT-standalone.jar"]
+CMD ["172.17.0.2","8080","GET","/","text/html", ""]

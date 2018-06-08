@@ -70,17 +70,17 @@ public class DiscoverHttp {
             
             //handle the GET request
             ClientHTTP client = new ClientHTTP(hostname, port, method, ressource, contentType);
-            client.sendRequest();
-            client.readResponse();
             
+            if("GET".equals(method)){
+                client.sendRequest();
+                client.readResponse();
+                client.close();
+            }        
             
             //handler the POST request
-            if(args.length > 5){
+            if( "POST".equals(method) && args.length > 5){
                 
-                String[] hoursTokens = args[5].split(":");
-                
-                Hours hours = new Hours(Integer.parseInt(hoursTokens[0]), Integer.parseInt(hoursTokens[1]));
-                client.sendRequest(method, hours);
+                client.sendRequest(method, args[5]);
                 client.readResponse();
                 client.close();
             } 

@@ -63,6 +63,19 @@ public class ClientHTTP {
         writer.flush();
         
     }
+    
+    public void sendRequest(String method, String body)throws IOException{
+       OutputStream output = socket.getOutputStream();
+       BufferedOutputStream writer = new BufferedOutputStream(output);
+       
+        StringBuilder request = new StringBuilder(setHeader(method,ressource, contentType, body.length())); 
+        
+        request.append(body);
+        request.append(CRLF);
+        writer.write(request.toString().getBytes("UTF-8"));
+        writer.flush();
+    }
+    
 /**
  * Send GET request from client to server
  * @throws IOException 

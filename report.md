@@ -20,15 +20,15 @@ Thanks to environment variable, we can setup our client
 `docker build -t res/discover-http .`
 - run a container that mimics GET:
 ```bash
-docker run --name client-html 127.0.0.1 8080 GET / text/html
-docker run --name client-json 127.0.0.1 8080 GET / application/json
-docker run --name client-xml 127.0.0.1 8080 GET / application/xml
+docker run --name client1 res/client-http 172.17.0.2 8080 GET / text/html
+docker run --name client1 res/client-http 172.17.0.2 8080 GET / application/json
+docker run --name client1 res/client-http 172.17.0.2 8080 GET / application/xml
 ```
 - run a container that mimics POST:
 ```bash
-docker run --name client-html 127.0.0.1 8080 POST / text/html 15:30
-docker run --name client-json 127.0.0.1 8080 POST / application/json '{"hour":11,"minute":53}'
-docker run --name client-xml 127.0.0.1 8080 POST / application/xml "<Hours><hour>12</hour><minute>21</minute></Hours>"
+docker run --name client1 res/client-http 172.17.0.2 8080 POST / text/html 15:45
+docker run --name client1 res/client-http 172.17.0.2 8080 POST / application/json '{"hour":11,"minute":53}'
+docker run --name client1 res/client-http 172.17.0.2 8080 POST / application/xml "<Hours><hour>12</hour><minute>21</minute></Hours>"
 ```
 
 ## Testing the server
@@ -57,9 +57,9 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8
 Accept-Language: en-us,en;q=0.5
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
 Content-Type: application/x-www-form-urlencoded
-Content-Length: 18
+Content-Length: 5
 
-hour=15&minute=45
+15:45
 ```
 
 - with content-type ***application/json***
@@ -92,6 +92,3 @@ Content-Length: 28
 
 <Hours><hour>12</hour><minute>21</minute></Hours>
 ```
-
-
-### Using dockerised client

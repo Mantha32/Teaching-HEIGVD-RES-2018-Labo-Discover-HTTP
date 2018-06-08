@@ -56,10 +56,13 @@ public void sendResponse() throws IOException{
             
             clock.set(hours.getHour(), hours.getMinute());            
         } else{
+            /*
             String[] tmp = requestHandler.getData().split("&");
             String[] tmpHour = tmp[0].split("=");
             String[] tmpMinute = tmp[1].split("=");
-            clock.set(Integer.parseInt(tmpHour[1]), Integer.parseInt(tmpMinute[1]));
+            */
+            String[] tmpHour = requestHandler.getData().split(":");
+            clock.set(Integer.parseInt(tmpHour[1]), Integer.parseInt(tmpHour[1]));
         }
     }
     
